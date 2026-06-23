@@ -3,6 +3,7 @@ import { CategoriesService } from "./categories.service";
 import { CreateCategoryDto } from "./dtos/create-category.dto";
 import { UpdateCategoryDto } from "./dtos/update-category.dto";
 import { PaginationDto } from "../common/dtos/pagination/pagination.dto";
+import { HandlerError } from "../common/errors/handler.error";
 
 export class CategoriesController {
     constructor(
@@ -30,7 +31,7 @@ export class CategoriesController {
 
         this.categoriesService.update(req.params.id as string, updateCategoryDto!)
             .then((product) => res.status(200).json(product))
-            .catch((error) => res.status(500).json({ error: error.message }));
+            .catch((error) => HandlerError.error(error, res));
     }
 
     findAll = (req: Request, res: Response) => {
@@ -48,13 +49,13 @@ export class CategoriesController {
 
         this.categoriesService.findOne(req.params.id as string)
             .then((product) => res.status(200).json(product))
-            .catch((error) => res.status(500).json({ error: error.message }));
+            .catch((error) => HandlerError.error(error, res));
     }
 
     delete = (req: Request, res: Response) => {
 
         this.categoriesService.delete(req.params.id as string)
             .then((product) => res.status(200).json(product))
-            .catch((error) => res.status(500).json({ error: error.message }));
+            .catch((error) => HandlerError.error(error, res));
     }
 }

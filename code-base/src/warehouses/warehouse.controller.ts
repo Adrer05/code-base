@@ -3,6 +3,7 @@ import { WharehouseService } from "./warehouse.service";
 import { CreateWarehouseDto } from "./dtos/create-warehouse.dto";
 import { UpdatePWarehouseDto } from "./dtos/update-warehouse.dto";
 import { PaginationDto } from "../common/dtos/pagination/pagination.dto";
+import { HandlerError } from "../common/errors/handler.error";
 
 export class WarehouseController {
     constructor(
@@ -30,7 +31,7 @@ export class WarehouseController {
 
         this.wharehouseService.update(req.params.id as string, updatePWarehouseDto!)
             .then((product) => res.status(200).json(product))
-            .catch((error) => res.status(500).json({ error: error.message }));
+            .catch((error) => HandlerError.error(error, res));
     }
 
     findAll = (req: Request, res: Response) => {
@@ -48,13 +49,13 @@ export class WarehouseController {
 
         this.wharehouseService.findOne(req.params.id as string)
             .then((product) => res.status(200).json(product))
-            .catch((error) => res.status(500).json({ error: error.message }));
+            .catch((error) => HandlerError.error(error, res));
     }
 
     delete = (req: Request, res: Response) => {
 
         this.wharehouseService.delete(req.params.id as string)
             .then((product) => res.status(200).json(product))
-            .catch((error) => res.status(500).json({ error: error.message }));
+            .catch((error) => HandlerError.error(error, res));
     }
 }

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "tsnd --respawn --clear src/main.ts"
+    "start:dev": "tsnd --respawn --clear src/main.ts",
+    "build":"rimraf dist && tsc"
   },
   "keywords": [],
   "author": "",

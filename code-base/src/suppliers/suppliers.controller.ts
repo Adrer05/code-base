@@ -3,6 +3,7 @@ import { SuppliersService } from "./suppliers.service";
 import { CreateSupplierDto } from "./dtos/create-supplier.dto"; 
 import { UpdateSupplierDto } from "./dtos/update-supplier.dto";
 import { PaginationDto } from "../common/dtos/pagination/pagination.dto";
+import { HandlerError } from "../common/errors/handler.error";
 
 export class SuppliersController {
     constructor(
@@ -30,7 +31,7 @@ export class SuppliersController {
 
         this.suppliersService.update(req.params.id as string, updateSupplierDto!)
             .then((product) => res.status(200).json(product))
-            .catch((error) => res.status(500).json({ error: error.message }));
+            .catch((error) => HandlerError.error(error, res));
     }
 
     findAll = (req: Request, res: Response) => {
@@ -48,13 +49,13 @@ export class SuppliersController {
 
         this.suppliersService.findOne(req.params.id as string)
             .then((product) => res.status(200).json(product))
-            .catch((error) => res.status(500).json({ error: error.message }));
+            .catch((error) => HandlerError.error(error, res));
     }
 
     delete = (req: Request, res: Response) => {
 
         this.suppliersService.delete(req.params.id as string)
             .then((product) => res.status(200).json(product))
-            .catch((error) => res.status(500).json({ error: error.message }));
+            .catch((error) => HandlerError.error(error, res));
     }
 }
