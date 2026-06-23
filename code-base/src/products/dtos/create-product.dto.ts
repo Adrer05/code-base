@@ -7,10 +7,11 @@ export class CreateProductDto {
         public stock: number,
         public category: string,
         public description: string | undefined,
+        public supplier: string,
     ){}
 
     static validate(data: {[key: string]:any}): [string | undefined, CreateProductDto | undefined]{
-        const { name, price, stock, category, description } = data;
+        const { name, price, stock, category, description, supplier } = data;
 
         if(!name) return ["Missing name", undefined];
         
@@ -25,6 +26,9 @@ export class CreateProductDto {
         
         if(description && description.length < 4) return ["Description too short", undefined];
         
-        return [undefined, new CreateProductDto(name, price, stock, category, description)];
+        if(!supplier) return ["Missing supplier", undefined];
+        if(!ValidatorsConfig.isMongoId( category )) return ["Supplier not valid", undefined];
+        
+        return [undefined, new CreateProductDto(name, price, stock, category, description, supplier)];
     }
 }

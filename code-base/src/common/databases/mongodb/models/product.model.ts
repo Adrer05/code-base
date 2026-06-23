@@ -6,6 +6,8 @@ export interface IProduct extends Document {
     stock: number;
     category: mongoose.Types.ObjectId;
     description: string | undefined;
+    supplier: mongoose.Types.ObjectId;
+    isActive: boolean;
 }
 
 const productSchema = new Schema<IProduct>({
@@ -31,6 +33,15 @@ const productSchema = new Schema<IProduct>({
     description: {
         type: String,
         maxlength: [200, "Description cannot exceed 200 characters"]
+    },
+    supplier: {
+        type: Schema.Types.ObjectId,
+        ref: 'Supplier',
+        required: [true, 'Supplier ID is required']
+    },
+    isActive: {
+        type: Boolean,
+        default: true
     }
 },
     {

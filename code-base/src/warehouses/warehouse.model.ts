@@ -1,24 +1,31 @@
 import mongoose, { Schema } from "mongoose";
 
-export interface ICategory extends Document {
+export interface IWarehouse extends Document {
     name: string;
-    description: string | undefined;
+    textLocation: string;
+    products: mongoose.Types.ObjectId[];
     isActive: boolean;
 }
 
-const categorySchema = new Schema<ICategory>({
+const warehouseSchema = new Schema<IWarehouse>({
     name: {
         type: String,
         required: [true, "Name is required"],
+        unique: true,
     },
-    description: {
+    textLocation: {
         type: String,
-        maxlength: [200, "Description cannot exceed 200 characters"]
+        required: [true, "Location is required"],
+    },
+    products: {
+        type: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
+        default: []
     },
     isActive: {
         type: Boolean,
         default: true
     }
+    
 },
     {
         timestamps: true
@@ -26,7 +33,7 @@ const categorySchema = new Schema<ICategory>({
 );
 
 // delete __v and change _id to id
-categorySchema.set("toJSON", {
+warehouseSchema.set("toJSON", {
     versionKey: false,
     virtuals: false,
     transform: (doc, ret: Record<string, any>) => {
@@ -37,4 +44,4 @@ categorySchema.set("toJSON", {
     }
 });
 
-export const Category = mongoose.model<ICategory>("Category", categorySchema);
+export const Warehouse = mongoose.model<IWarehouse>("Warehouse", warehouseSchema);

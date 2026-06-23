@@ -20,10 +20,12 @@ export class CategoriesService {
             const { page, limit } = paginationDto;
             const skip = (page - 1) * limit;
 
-            const products = await Category.find().skip(skip).limit(limit);
-            const total = await Category.countDocuments();
+            const categor = await Category.find({ isActive: true })
+            .skip(skip)
+            .limit(limit);
+            const total = await Category.countDocuments({ isActive: true });
             return {
-                data: products,
+                data: categor,
                 meta: {
                     page,
                     limit,
@@ -49,9 +51,13 @@ export class CategoriesService {
 
     async delete(id: string) {
         try {
-            const category = await Category.findOneAndDelete({ _id: id }); //! Nunca aplicar eliminación física en un categoryo, lo ideal es marcarlo como inactivo o eliminado
+            const category = await Category.findOneAndUpdate(
+                { _id: id },
+                { isActive: false },
+                { new: true }
+            );
             if (!category) throw new Error("Category not found");
-
+    
             return category;
         } catch (error) {
             throw error;
@@ -60,7 +66,7 @@ export class CategoriesService {
 
     async findOne(id: string) {
         try {
-            const category = await Category.findOne({ _id: id });
+            const category = await Category.findOne({ _id: id, isActive: true });
             if (!category) throw new Error("Category not found");
 
             return category;
